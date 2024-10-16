@@ -8,67 +8,66 @@
 
 
 
-	  letras("T");
 escribirRAM(0,1,0,1,0,1,0,0);
 	  escribirLCD();
 
 	  ejecutar();
 
-	  letras("e");
+	  escribirRAM(0,1,1,0,0,1,0,1); 
+
 
 	  escribirLCD();
 
 	  ejecutar();
 
-	  letras("m");
+	  escribirRAM(0,1,1,0,1,1,0,1); 
+	  escribirLCD();
+
+	  ejecutar();
+
+	  escribirRAM(1,1,1,1,0,0,0,0);
 
 	  escribirLCD();
 
 	  ejecutar();
 
-	  letras("p");
+	  escribirRAM(0,1,1,0,0,1,0,1); 
 
 	  escribirLCD();
 
 	  ejecutar();
 
-	  letras("e");
+	  escribirRAM(0,1,1,1,0,0,1,0);
 
 	  escribirLCD();
 
 	  ejecutar();
 
-	  letras("r");
+	  escribirRAM(0,1,1,0,0,0,0,1); 
 
 	  escribirLCD();
 
 	  ejecutar();
 
-	  letras("a");
+	  escribirRAM(0,1,1,1,0,1,0,0);
 
 	  escribirLCD();
 
 	  ejecutar();
 
-	  letras("t");
+	  escribirRAM(0,1,1,1,0,1,0,1);
 
 	  escribirLCD();
 
 	  ejecutar();
 
-	  letras("u");
+	  escribirRAM(0,1,1,1,0,0,1,0);
 
 	  escribirLCD();
 
 	  ejecutar();
 
-	  letras("r");
-
-	  escribirLCD();
-
-	  ejecutar();
-
-	  letras("a");
+	  escribirRAM(0,1,1,0,0,0,0,1);
 
 	  escribirLCD();
 
@@ -130,7 +129,7 @@ escribirRAM(0,1,0,1,0,1,0,0);
 
 	  ejecutar();
 
-	  caracteres(".");
+	  escribirRAM(0,0,1,0,1,1,1,0);
 
 	  escribirLCD();
 
