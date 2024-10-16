@@ -1,1071 +1,381 @@
-D
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
-/* USER CODE END Header */
-/* Includes ------------------------------------------------------------------*/
-#include "main.h"
 
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
 
-/* USER CODE END Includes */
+	  //Sensor de temperatura LM35
 
-/* Private typedef -----------------------------------------------------------*/
-/* USER CODE BEGIN PTD */
+	  confdireccion(0, 0, 0, 0, 0, 0, 0);
 
-/* USER CODE END PTD */
 
-/* Private define ------------------------------------------------------------*/
-/* USER CODE BEGIN PD */
-int datLCD[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-int a = 0;
-int C=0;
-int s=0;
 
-/* USER CODE END PD */
 
-/* Private macro -------------------------------------------------------------*/
-/* USER CODE BEGIN PM */
-void configInicio(int bits, int linea, int formato, int on, int cursor, int parpadeo, int LR, int S);
-void borrarPantalla();
-void volverinicio();
-void ejecutar();
-void escribirLCD();
-void espacio(int LR, int SC);
-void confdireccion(int AC6, int AC5, int AC4, int AC3, int AC2, int AC1, int AC0);
-void escribirRAM(int D7, int D6, int D5, int D4, int D3, int D2, int D1, int D0);
-void letras(char letra[]);
-void numero(int numero);
-void caracteres (char caracter[]);
-void descomponerNumero3(int valor) ;
-void descomponerNumero(int valor) ;
-/* USER CODE END PM */
 
-/* Private variables ---------------------------------------------------------*/
-ADC_HandleTypeDef hadc1;
-DMA_HandleTypeDef hdma_adc1;
+	  letras("T");
 
-/* USER CODE BEGIN PV */
+	  escribirLCD();
 
-/* USER CODE END PV */
+	  ejecutar();
 
-/* Private function prototypes -----------------------------------------------*/
-void SystemClock_Config(void);
-static void MX_GPIO_Init(void);
-static void MX_DMA_Init(void);
-static void MX_ADC1_Init(void);
-/* USER CODE BEGIN PFP */
+	  letras("e");
 
-/* USER CODE END PFP */
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
-int botonPresionado = 0;
-/* USER CODE END 0 */
+	  escribirLCD();
 
-/**
-* @brief  The application entry point.
-* @retval int
-*/
-int main(void)
-{
-/* USER CODE BEGIN 1 */
+	  ejecutar();
 
-/* USER CODE END 1 */
+	  letras("m");
 
-/* MCU Configuration--------------------------------------------------------*/
+	  escribirLCD();
 
-/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-HAL_Init();
+	  ejecutar();
 
-/* USER CODE BEGIN Init */
+	  letras("p");
 
-/* USER CODE END Init */
+	  escribirLCD();
 
-/* Configure the system clock */
-SystemClock_Config();
+	  ejecutar();
 
-/* USER CODE BEGIN SysInit */
+	  letras("e");
 
-/* USER CODE END SysInit */
+	  escribirLCD();
 
-/* Initialize all configured peripherals */
-MX_GPIO_Init();
-MX_DMA_Init();
-MX_ADC1_Init();
-/* USER CODE BEGIN 2 */
-uint32_t entrada[4]={0,0,0,0};
-HAL_ADC_Start_DMA(&hadc1,entrada,4);
-configInicio(1,1,0,1,1,1,1,0);
-/* USER CODE END 2 */
+	  ejecutar();
 
-/* Infinite loop */
-/* USER CODE BEGIN WHILE */
-while (1) {
-	C = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_4);
+	  letras("r");
 
-	if (C == GPIO_PIN_SET && botonPresionado == 0) {
-	    HAL_Delay(50);
-	    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_4) == GPIO_PIN_SET) {
-	        s = (s + 1) % 6;
-	        botonPresionado = 1;
-	    }
-	}
-	if (C == GPIO_PIN_RESET && botonPresionado == 1) {
-	    HAL_Delay(50);
-	    botonPresionado = 0;
-	}
+	  escribirLCD();
 
-	/*C = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_4);
+	  ejecutar();
 
-	    if (C == GPIO_PIN_SET && botonPresionado == 0) {
-	        HAL_Delay(50);
-	        if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_4) == GPIO_PIN_SET) {
-	            s++;
-	            botonPresionado = 1;
-	            if (s > 5) {
-	                s = 0;
-	            }
-	        }
-	        HAL_Delay(200);
-	    }
+	  letras("a");
 
-	    if (C == GPIO_PIN_RESET && botonPresionado == 1) {
-	        HAL_Delay(50);
-	        botonPresionado = 0;
-	    }
-*/
-switch (s) {
-case 1:
+	  escribirLCD();
 
-// Potenciometro
-confdireccion(0, 0, 0, 0, 0, 0, 0);
-letras("V");
-escribirLCD();
-ejecutar();
-letras("o");
-escribirLCD();
-ejecutar();
-letras("l");
-escribirLCD();
-ejecutar();
-letras("t");
-escribirLCD();
-ejecutar();
+	  ejecutar();
 
-espacio(1, 0);
+	  letras("t");
 
-letras("B");
-escribirLCD();
-ejecutar();
-letras("i");
-escribirLCD();
-ejecutar();
-letras("t");
-escribirLCD();
-ejecutar();
-letras("s");
-escribirLCD();
-ejecutar();
+	  escribirLCD();
 
-espacio(1, 0);
+	  ejecutar();
 
-letras("G");
-escribirLCD();
-ejecutar();
-letras("r");
-escribirLCD();
-ejecutar();
-letras("a");
-escribirLCD();
-ejecutar();
-letras("d");
-escribirLCD();
-ejecutar();
+	  letras("u");
 
-confdireccion(1, 0, 0, 0, 0, 0, 0);
+	  escribirLCD();
 
-int v1= entrada[0];
+	  ejecutar();
 
-float volts = (v1 * 3.3) / 4096;
-int volt= (int)(volts * 100);
+	  letras("r");
 
-int vol3 = volt / 100;
-int vol22 = volt - (vol3 * 100);
-int vol2 = vol22 / 10;
-int vol1 = volt - (vol3 * 100) - (vol2 * 10)  ;
+	  escribirLCD();
 
-numero(vol3);
-escribirLCD();
-ejecutar();
+	  ejecutar();
 
-caracteres(".");
-escribirLCD();
-ejecutar();
+	  letras("a");
 
-numero(vol2);
-escribirLCD();
-ejecutar();
+	  escribirLCD();
 
-numero(vol1);
-escribirLCD();
-ejecutar();
-espacio(1, 0);
+	  ejecutar();
 
-descomponerNumero(entrada[0]);
 
-espacio(1, 0);
-// Convertir voltaje a grados
-int grados = (int)((volts * 360) / 3.3);
 
-descomponerNumero3(grados);
 
-HAL_Delay(1000);
 
-break;
-case 2:
-//Fotoresistencia
-confdireccion(0, 0, 0, 0, 0, 0, 0);
-letras("C");
-escribirLCD();
-ejecutar();
-letras("a");
-escribirLCD();
-ejecutar();
-letras("n");
-escribirLCD();
-ejecutar();
-letras("t");
-escribirLCD();
-ejecutar();
-caracteres(".");
-escribirLCD();
-ejecutar();
-espacio(1, 0);
-letras("L");
-escribirLCD();
-ejecutar();
-letras("u");
-escribirLCD();
-ejecutar();
-letras("z");
-escribirLCD();
-ejecutar();
-confdireccion(1, 0, 0, 0, 0, 0, 0);
-int v2 =  entrada[1];
+	  confdireccion(1, 0, 0, 0, 0, 0, 0);
 
-descomponerNumero(v2);
 
-HAL_Delay(500);
-if(v2<=10){
-borrarPantalla();
-confdireccion(0, 0, 0, 1, 0,1,1);
-letras("N");
-escribirLCD();
-ejecutar();
-letras("o");
-escribirLCD();
-ejecutar();
 
-confdireccion(1, 0, 0, 1, 0,0,0);
-letras("H");
-escribirLCD();
-ejecutar();
-letras("a");
-escribirLCD();
-ejecutar();
-letras("y");
-escribirLCD();
-ejecutar();
 
-espacio(1, 0);
-letras("L");
-escribirLCD();
-ejecutar();
-letras("u");
-escribirLCD();
-ejecutar();
-letras("z");
-escribirLCD();
-ejecutar();
+
+	  int v4 = entrada[3];
+
+
+
+	  // Convertir bits a voltaje
+
+	  float voltaje = (v4 * 3.3) / 4096;
+
+	  int vol= (int)(voltaje * 100);
+
+	  // Convertir voltaje a temperatura en °C (asumiendo 10mV por grado)
+
+	  float temp = voltaje / 0.01;  // temp en grados °C
+
+
+
+	  int bit4 = temp / 1000;
+
+	  int bit33 = temp - (bit4 * 1000);
+
+	  int bit3 = bit33 / 100;
+
+	  int bit22 = temp- (bit4 * 1000) - (bit3 * 100);
+
+	  int bit2 = bit22 / 10;
+
+	  int bit1 = temp- (bit4* 1000) - (bit3 * 100) - (bit2 * 10);
+
+
+
+
+
+	  num(bit4);  // Mostrar el primer dígito (miles)
+
+	  escribirLCD();
+
+	  ejecutar();
+
+
+
+	  num(bit3);  // Mostrar el segundo dígito (centenas)
+
+	  escribirLCD();
+
+	  ejecutar();
+
+	  caracteres(".");
+
+	  escribirLCD();
+
+	  ejecutar();
+
+	  num(bit2);  // Mostrar el tercer dígito (decenas)
+
+	  escribirLCD();
+
+	  ejecutar();
+
+
+
+	  num(bit1);  // Mostrar el cuarto dígito (unidades)
+
+	  escribirLCD();
+
+	  ejecutar();
+
+
+
+
+
+
+
+	  HAL_Delay(300);
+
+	  break;
+
+	  }
+
+	  HAL_Delay(100);*/
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+  }
+  /* USER CODE END 3 */
 }
-else if(v2>11&&v2<=600){
-borrarPantalla();
-confdireccion(0, 0, 0, 1, 0,1,0);
+  void ejecutar()
 
-letras("P");
-escribirLCD();
-ejecutar();
-letras("o");
-escribirLCD();
-ejecutar();
-letras("c");
-escribirLCD();
-ejecutar();
-letras("a");
-escribirLCD();
-ejecutar();
+  {
 
-confdireccion(1, 0, 0, 1, 1,0,0);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_RESET);  // E = 0
 
-letras("L");
-escribirLCD();
-ejecutar();
-letras("u");
-escribirLCD();
-ejecutar();
-letras("z");
-escribirLCD();
-ejecutar();
-}
-else if(v2>600&&v2<=1100){
-borrarPantalla();
-confdireccion(1, 0, 0, 0, 1,1,0);
+  HAL_Delay(1);
 
-letras("I");
-escribirLCD();
-ejecutar();
-letras("n");
-escribirLCD();
-ejecutar();
-letras("t");
-escribirLCD();
-ejecutar();
-letras("e");
-escribirLCD();
-ejecutar();
-letras("r");
-escribirLCD();
-ejecutar();
-letras("m");
-escribirLCD();
-ejecutar();
-letras("e");
-escribirLCD();
-ejecutar();
-letras("d");
-escribirLCD();
-ejecutar();
-letras("i");
-escribirLCD();
-ejecutar();
-letras("o");
-escribirLCD();
-ejecutar();
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_SET);    // E = 1
 
-}else if(v2>1100&&v2<=2500){
-borrarPantalla();
-confdireccion(0, 0, 0, 1, 0,1,0);
+  HAL_Delay(2);
 
-letras("H");
-escribirLCD();
-ejecutar();
-letras("a");
-escribirLCD();
-ejecutar();
-letras("y");
-escribirLCD();
-ejecutar();
-confdireccion(1, 0, 0, 0, 1,1,1);
-letras("L");
-escribirLCD();
-ejecutar();
-letras("u");
-escribirLCD();
-ejecutar();
-letras("z");
-escribirLCD();
-ejecutar();
-espacio(1, 0);
-letras("E");
-escribirLCD();
-ejecutar();
-letras("x");
-escribirLCD();
-ejecutar();
-letras("t");
-escribirLCD();
-ejecutar();
-caracteres(".");
-escribirLCD();
-ejecutar();
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_RESET);  // E = 0
 
-}else if(v2>2500&&v2<=4095){
-borrarPantalla();
-confdireccion(0, 0, 0, 1, 0,1,0);
+  HAL_Delay(3);
 
-letras("M");
-escribirLCD();
-ejecutar();
-letras("u");
-escribirLCD();
-ejecutar();
-letras("c");
-escribirLCD();
-ejecutar();
-letras("h");
-escribirLCD();
-ejecutar();
-letras("a");
-escribirLCD();
-ejecutar();
-confdireccion(1, 0, 0, 1, 0,1,0);
-letras("L");
-escribirLCD();
-ejecutar();
-espacio(1, 0);
-letras("u");
-escribirLCD();
-ejecutar();
-letras("z");
-}
+  }
 
-HAL_Delay(50);
+  void escribirLCD()
 
-break;
+  {
+
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, datLCD[0]);  // RS Pin
+
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, datLCD[1]);
+
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, datLCD[2]);
+
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, datLCD[3]);
+
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, datLCD[4]);
+
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, datLCD[5]);
+
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, datLCD[6]);
+
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, datLCD[7]);
+
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, datLCD[8]);
+
+  }
+
+  void configInicio(int bits, int linea, int formato, int on, int cursor, int parpadeo, int LR, int S)
+
+  {
+
+  /* CONFIGURACIÓN DE TODOS LOS BITS CUANDO ESTEN ABAJO */
 
 
 
-case 3:
-//Sensor cny70
+  escribirLCD();
 
-confdireccion(0, 0, 0, 0, 0, 0, 0);
-letras("D");
-escribirLCD();
-ejecutar();
-letras("i");
-escribirLCD();
-ejecutar();
-letras("s");
-escribirLCD();
-ejecutar();
-letras("t");
-escribirLCD();
-ejecutar();
-letras("a");
-escribirLCD();
-ejecutar();
-letras("n");
-escribirLCD();
-ejecutar();
-letras("c");
-escribirLCD();
-ejecutar();
-letras("i");
-escribirLCD();
-ejecutar();
-letras("a");
-escribirLCD();
-ejecutar();
-confdireccion(1, 0, 0, 0, 0, 0, 0);
-int v3 =  entrada[2];
-
-int amin = 630;    // ADC a 15 cm
-int amax = 4095;   // ADC a 0.1 cm (1 mm)
-float dmin= 15.0;  // 15 cm
-float dmax = 0.1;   // 0.1 cm (1 mm)
-
-float dist = (v3 - amax) * (dmin - dmax) / (amin - amax) + dmax;
-
-int dis = (int)(dist * 10);
-
-descomponerNumero3(dis);
-
-if(v3<=630){
-borrarPantalla();
-confdireccion(0, 0, 0, 1, 0,1,0);
-letras("M");
-escribirLCD();
-ejecutar();
-letras("u");
-escribirLCD();
-ejecutar();
-letras("y");
-escribirLCD();
-ejecutar();
-
-confdireccion(1, 0, 0, 1, 0,0,1);
-letras("L");
-escribirLCD();
-ejecutar();
-letras("e");
-escribirLCD();
-ejecutar();
-letras("j");
-escribirLCD();
-ejecutar();
-letras("o");
-escribirLCD();
-ejecutar();
-letras("s");
-escribirLCD();
-ejecutar();
-}
-else if(v3>630&&v3<=860){
-borrarPantalla();
-confdireccion(1, 0, 0, 1, 0,0,1);
-
-letras("L");
-escribirLCD();
-ejecutar();
-letras("e");
-escribirLCD();
-ejecutar();
-letras("j");
-escribirLCD();
-ejecutar();
-letras("o");
-escribirLCD();
-ejecutar();
-letras("s");
-escribirLCD();
-ejecutar();
-}
-else if(v3>860&&v3<=2600){
-borrarPantalla();
-confdireccion(1, 0, 0, 1, 0,0,1);
-
-letras("C");
-escribirLCD();
-ejecutar();
-letras("e");
-escribirLCD();
-ejecutar();
-letras("r");
-escribirLCD();
-ejecutar();
-letras("c");
-escribirLCD();
-ejecutar();
-letras("a");
-escribirLCD();
-ejecutar();
-}
-else if(v2>2600&&v2<=4095){
-borrarPantalla();
-confdireccion(0, 0, 0, 1, 0,1,0);
-letras("M");
-escribirLCD();
-ejecutar();
-letras("u");
-escribirLCD();
-ejecutar();
-letras("y");
-escribirLCD();
-ejecutar();
-
-confdireccion(1, 0, 0, 1, 0,0,1);
-letras("C");
-escribirLCD();
-ejecutar();
-letras("e");
-escribirLCD();
-ejecutar();
-letras("r");
-escribirLCD();
-ejecutar();
-letras("c");
-escribirLCD();
-ejecutar();
-letras("a");
-escribirLCD();
-ejecutar();
-}
-
-HAL_Delay(100);
-
-break;
-case 4:
-//Sensor cny70
-
-confdireccion(0, 0, 0, 0, 0, 0, 0);
-letras("C");
-escribirLCD();
-ejecutar();
-letras("o");
-escribirLCD();
-ejecutar();
-letras("l");
-escribirLCD();
-ejecutar();
-letras("o");
-escribirLCD();
-ejecutar();
-letras("r");
-escribirLCD();
-ejecutar();
-caracteres("(");
-escribirLCD();
-ejecutar();
-numero(3);
-escribirLCD();
-ejecutar();
-letras("c");
-escribirLCD();
-ejecutar();
-letras("m");
-escribirLCD();
-ejecutar();
-caracteres(")");
-escribirLCD();
-ejecutar();
-
-if(v3>=1000&&v3<=1050){
-borrarPantalla();
-confdireccion(1, 0, 0, 0, 1,0,0);
-letras("B");
-escribirLCD();
-ejecutar();
-letras("L");
-escribirLCD();
-ejecutar();
-letras("A");
-escribirLCD();
-ejecutar();
-letras("N");
-escribirLCD();
-ejecutar();
-letras("C");
-escribirLCD();
-ejecutar();
-letras("O");
-escribirLCD();
-ejecutar();
-}
-else if(v3>=800&&v3<=829){
-borrarPantalla();
-confdireccion(1, 0, 0, 0, 1,0,1);
-
-letras("A");
-escribirLCD();
-ejecutar();
-letras("Z");
-escribirLCD();
-ejecutar();
-letras("U");
-escribirLCD();
-ejecutar();
-letras("L");
-escribirLCD();
-ejecutar();
-
-}
-else if(v3>=830&&v3<=866){
-borrarPantalla();
-confdireccion(1, 0, 0, 0, 1,0,0);
-letras("V");
-escribirLCD();
-ejecutar();
-letras("E");
-escribirLCD();
-ejecutar();
-letras("R");
-escribirLCD();
-ejecutar();
-letras("D");
-escribirLCD();
-ejecutar();
-letras("E");
-escribirLCD();
-ejecutar();
-}
-else if(v3>=900&&v3<=930){
-borrarPantalla();
-confdireccion(1, 0, 0, 0, 1,0,1);
-
-letras("R");
-escribirLCD();
-ejecutar();
-letras("O");
-escribirLCD();
-ejecutar();
-letras("J");
-escribirLCD();
-ejecutar();
-letras("O");
-escribirLCD();
-ejecutar();;
-}
-else if(v3>=956&&v3<=965){
-borrarPantalla();
-confdireccion(1, 0, 0, 0, 0,1,1);
-letras("A");
-escribirLCD();
-ejecutar();
-letras("M");
-escribirLCD();
-ejecutar();
-letras("A");
-escribirLCD();
-ejecutar();
-letras("R");
-escribirLCD();
-ejecutar();
-letras("I");
-escribirLCD();
-ejecutar();
-letras("L");
-escribirLCD();
-ejecutar();
-letras("L");
-escribirLCD();
-ejecutar();
-letras("O");
-escribirLCD();
-ejecutar();
-}
-
-HAL_Delay(100);
-
-break;
-
-case 5:
-//Sensor de temperatura LM35
-confdireccion(0, 0, 0, 0, 0, 0, 0);
+  ejecutar();
 
 
-letras("T");
-escribirLCD();
-ejecutar();
-letras("e");
-escribirLCD();
-ejecutar();
-letras("m");
-escribirLCD();
-ejecutar();
-letras("p");
-escribirLCD();
-ejecutar();
-letras("e");
-escribirLCD();
-ejecutar();
-letras("r");
-escribirLCD();
-ejecutar();
-letras("a");
-escribirLCD();
-ejecutar();
-letras("t");
-escribirLCD();
-ejecutar();
-letras("u");
-escribirLCD();
-ejecutar();
-letras("r");
-escribirLCD();
-ejecutar();
-letras("a");
-escribirLCD();
-ejecutar();
 
-confdireccion(1, 0, 0, 0, 0, 0, 0);
+  /* FUNCION SET */
 
-int v4 = entrada[3];
+  datLCD[0] = 0; datLCD[1] = 0; datLCD[2] = 0; datLCD[3] = 1; datLCD[4] = bits;datLCD[5] = linea;datLCD[6] = formato;
 
-// Convertir bits a voltaje
-float voltaje = (v4 * 3.3) / 4096;
+  escribirLCD();
 
-// Convertir voltaje a temperatura en °C ( 10mV por grado)
-float tem = voltaje / 0.01;  // temp en grados °C
-int temp= (int)(tem * 100);
-
-int bit4 = temp / 1000;
-int bit33 = temp - (bit4 * 1000);
-int bit3 = bit33 / 100;
-int bit22 = temp- (bit4 * 1000) - (bit3 * 100);
-int bit2 = bit22 / 10;
-int bit1 = temp- (bit4* 1000) - (bit3 * 100) - (bit2 * 10);
-
-numero(bit4);
-escribirLCD();
-ejecutar();
-numero(bit3);
-escribirLCD();
-ejecutar();
-caracteres(".");
-escribirLCD();
-ejecutar();
-numero(bit2);
-escribirLCD();
-ejecutar();
-numero(bit1);
-escribirLCD();
-ejecutar();
-
-escribirRAM( 1, 1, 0, 0, 0, 1, 1, 0);
-
-	  		  escribirLCD();
-	  		  ejecutar();
+  ejecutar();
 
 
-HAL_Delay(300);
-break;
-}
-HAL_Delay(100);
-/* USER CODE END WHILE */
 
-/* USER CODE BEGIN 3 */
-}
-/* USER CODE END 3 */
-}
-void ejecutar()
-{
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_RESET);  // E = 0
-	HAL_Delay(1);
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_SET);    // E = 1
-	HAL_Delay(2);
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_RESET);  // E = 0
-	HAL_Delay(3);
-}
-void escribirLCD()
-{
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, datLCD[0]);  // RS Pin
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, datLCD[1]);
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, datLCD[2]);
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, datLCD[3]);
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, datLCD[4]);
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, datLCD[5]);
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, datLCD[6]);
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, datLCD[7]);
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, datLCD[8]);
-}
-void configInicio(int bits, int linea, int formato, int on, int cursor, int parpadeo, int LR, int S)
-{
-	/* CONFIGURACIÓN DE TODOS LOS BITS CUANDO ESTEN ABAJO */
-	escribirLCD();
-	ejecutar();
-	/* FUNCION SET */
-	datLCD[0] = 0; datLCD[1] = 0; datLCD[2] = 0; datLCD[3] = 1; datLCD[4] = bits;datLCD[5] = linea;datLCD[6] = formato;
-	escribirLCD();
-	ejecutar();
-	/* Display on/off control */
-	datLCD[0] = 0;datLCD[1] = 0;datLCD[2] = 0;datLCD[3] = 0;datLCD[4] = 0;datLCD[5] = 1; datLCD[6] = on;datLCD[7] = cursor;datLCD[8] = parpadeo;
-	escribirLCD();
-	ejecutar();
-	/* Entry mode set */
-	datLCD[0] = 0;datLCD[1] = 0;datLCD[2] = 0;datLCD[3] = 0;datLCD[4] = 0;datLCD[5] = 0;datLCD[6] = 1; datLCD[7] = LR;datLCD[8] = S;
-	escribirLCD();
-	ejecutar();
-}
-void borrarPantalla()
-{
-	datLCD[0] = 0; datLCD[1] = 0;datLCD[2] = 0;datLCD[3] = 0;datLCD[4] = 0;datLCD[5] = 0;datLCD[6] = 0;datLCD[7] = 0;datLCD[8] = 1;
-	escribirLCD();
-	ejecutar();
+  /* Display on/off control */
 
-}
-void volverinicio()
-{
-	datLCD[0] = 0;datLCD[1] = 0;datLCD[2] = 0;datLCD[3] = 0;datLCD[4] = 0;datLCD[5] = 0;datLCD[6] = 0;datLCD[7] = 1;datLCD[8] = 0;
-	escribirLCD();
-	ejecutar();
-}
-void espacio(int LR, int SC)
-{
-	datLCD[0] = 0; datLCD[1] = 0;datLCD[2] = 0;datLCD[3] = 0;datLCD[4] = 1; datLCD[5] = SC; datLCD[6] = LR;datLCD[7] = 0;datLCD[8] = 0;
-	escribirLCD();
-	ejecutar();
-}
-void confdireccion(int AC6, int AC5, int AC4, int AC3, int AC2, int AC1, int AC0)
-{
-	datLCD[0] = 0;datLCD[1] = 1;datLCD[2] = AC6;datLCD[3] = AC5;datLCD[4] = AC4;datLCD[5] = AC3;datLCD[6] = AC2;datLCD[7] = AC1;datLCD[8] = AC0;
-	escribirLCD();
-	ejecutar();
-}
-void escribirRAM(int D7, int D6, int D5, int D4, int D3, int D2, int D1, int D0){
-	datLCD[0] = 1; datLCD[1] = D7;datLCD[2] = D6;datLCD[3] = D5;datLCD[4] = D4;datLCD[5] = D3;datLCD[6] = D2;datLCD[7] = D1;datLCD[8] = D0;
-	escribirLCD();
-	ejecutar();
-};
-	void letras(char letra[])
-	{
-		switch (letra[0])
-		{
-		case 'a':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=1; datLCD[4]=0; datLCD[5]=0; datLCD[6]=0; datLCD[7]=0; datLCD[8]=1;
-		break;
-		case 'A':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=0; datLCD[4]=0; datLCD[5]=0; datLCD[6]=0; datLCD[7]=0; datLCD[8]=1;
-		break;
-		case 'b':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=1; datLCD[4]=0; datLCD[5]=0; datLCD[6]=0; datLCD[7]=1; datLCD[8]=0;
-		break;
-		case 'B':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=0; datLCD[4]=0; datLCD[5]=0; datLCD[6]=0; datLCD[7]=1; datLCD[8]=0;
-		break;
-		case 'c':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=1; datLCD[4]=0; datLCD[5]=0; datLCD[6]=0; datLCD[7]=1; datLCD[8]=1;
-		break;
-		case 'C':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=0; datLCD[4]=0; datLCD[5]=0; datLCD[6]=0; datLCD[7]=1; datLCD[8]=1;
-		break;
-		case 'd':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=1; datLCD[4]=0; datLCD[5]=0; datLCD[6]=1; datLCD[7]=0; datLCD[8]=0;
-		break;
-		case 'D':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=0; datLCD[4]=0; datLCD[5]=0; datLCD[6]=1; datLCD[7]=0; datLCD[8]=0;
-		break;
-		case 'e':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=1; datLCD[4]=0; datLCD[5]=0; datLCD[6]=1; datLCD[7]=0; datLCD[8]=1;
-		break;
-		case 'E':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=0; datLCD[4]=0; datLCD[5]=0; datLCD[6]=1; datLCD[7]=0; datLCD[8]=1;
-		break;
-		case 'f':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=1; datLCD[4]=0; datLCD[5]=0; datLCD[6]=1; datLCD[7]=1; datLCD[8]=0;
-		break;
-		case 'F':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=0; datLCD[4]=0; datLCD[5]=0; datLCD[6]=1; datLCD[7]=1; datLCD[8]=0;
-		break;
-		case 'g':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=1; datLCD[4]=0; datLCD[5]=0; datLCD[6]=1; datLCD[7]=1; datLCD[8]=1;
-		break;
-		case 'G':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=0; datLCD[4]=0; datLCD[5]=0; datLCD[6]=1; datLCD[7]=1; datLCD[8]=1;
-		break;
-		case 'h':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=1; datLCD[4]=0; datLCD[5]=1; datLCD[6]=0; datLCD[7]=0; datLCD[8]=0;
-		break;
-		case 'H':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=0; datLCD[4]=0; datLCD[5]=1; datLCD[6]=0; datLCD[7]=0; datLCD[8]=0;
-		break;
-		case 'i':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=1; datLCD[4]=0; datLCD[5]=1; datLCD[6]=0; datLCD[7]=0; datLCD[8]=1;
-		break;
-		case 'I':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=0; datLCD[4]=0; datLCD[5]=1; datLCD[6]=0; datLCD[7]=0; datLCD[8]=1;
-		break;
-		case 'j':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=1; datLCD[4]=0; datLCD[5]=1; datLCD[6]=0; datLCD[7]=1; datLCD[8]=0;
-		break;
-		case 'J':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=0; datLCD[4]=0; datLCD[5]=1; datLCD[6]=0; datLCD[7]=1; datLCD[8]=0;
-		break;
-		case 'k':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=1; datLCD[4]=0; datLCD[5]=1; datLCD[6]=0; datLCD[7]=1; datLCD[8]=1;
-		break;
-		case 'K':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=0; datLCD[4]=0; datLCD[5]=1; datLCD[6]=0; datLCD[7]=1; datLCD[8]=1;
-		break;
-		case 'l':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=1; datLCD[4]=0; datLCD[5]=1; datLCD[6]=1; datLCD[7]=0; datLCD[8]=0;
-		break;
-		case 'L':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=0; datLCD[4]=0; datLCD[5]=1; datLCD[6]=1; datLCD[7]=0; datLCD[8]=0;
-		break;
-		case 'm':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=1; datLCD[4]=0; datLCD[5]=1; datLCD[6]=1; datLCD[7]=0; datLCD[8]=1;
-		break;
-		case 'M':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=0; datLCD[4]=0; datLCD[5]=1; datLCD[6]=1; datLCD[7]=0; datLCD[8]=1;
-		break;
-		case 'n':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=1; datLCD[4]=0; datLCD[5]=1; datLCD[6]=1; datLCD[7]=1; datLCD[8]=0;
-		break;
-		case 'N':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=0; datLCD[4]=0; datLCD[5]=1; datLCD[6]=1; datLCD[7]=1; datLCD[8]=0;
-		break;
-		case 'o':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=1; datLCD[4]=0; datLCD[5]=1; datLCD[6]=1; datLCD[7]=1; datLCD[8]=1;
-		break;
-		case 'O':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=0; datLCD[4]=0; datLCD[5]=1; datLCD[6]=1; datLCD[7]=1; datLCD[8]=1;
-		break;
-		case 'p':datLCD[0]=1; datLCD[1]=1; datLCD[2]=1; datLCD[3]=1; datLCD[4]=1; datLCD[5]=0; datLCD[6]=0; datLCD[7]=0; datLCD[8]=0;
-		break;
-		case 'P':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=0; datLCD[4]=1; datLCD[5]=0; datLCD[6]=0; datLCD[7]=0; datLCD[8]=0;
-		break;
-		case 'q':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=1; datLCD[4]=1; datLCD[5]=0; datLCD[6]=0; datLCD[7]=0; datLCD[8]=1;
-		break;
-		case 'Q':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=0; datLCD[4]=1; datLCD[5]=0; datLCD[6]=0; datLCD[7]=0; datLCD[8]=1;
-		break;
-		case 'r':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=1; datLCD[4]=1; datLCD[5]=0; datLCD[6]=0; datLCD[7]=1; datLCD[8]=0;
-		break;
-		case 'R':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=0; datLCD[4]=1; datLCD[5]=0; datLCD[6]=0; datLCD[7]=1; datLCD[8]=0;
-		break;
-		case 's':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=1; datLCD[4]=1; datLCD[5]=0; datLCD[6]=0; datLCD[7]=1; datLCD[8]=1;
-		break;
-		case 'S':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=0; datLCD[4]=1; datLCD[5]=0; datLCD[6]=0; datLCD[7]=1; datLCD[8]=1;
-		break;
-		case 't':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=1; datLCD[4]=1; datLCD[5]=0; datLCD[6]=1; datLCD[7]=0; datLCD[8]=0;
-		break;
-		case 'T':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=0; datLCD[4]=1; datLCD[5]=0; datLCD[6]=1; datLCD[7]=0; datLCD[8]=0;
-		break;
-		case 'u':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=1; datLCD[4]=1; datLCD[5]=0; datLCD[6]=1; datLCD[7]=0; datLCD[8]=1;
-		break;
-		case 'U':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=0; datLCD[4]=1; datLCD[5]=0; datLCD[6]=1; datLCD[7]=0; datLCD[8]=1;
-		break;
-		case 'v':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=1; datLCD[4]=1; datLCD[5]=0; datLCD[6]=1; datLCD[7]=1; datLCD[8]=0;
-		break;
-		case 'V':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=0; datLCD[4]=1; datLCD[5]=0; datLCD[6]=1; datLCD[7]=1; datLCD[8]=0;
-		break;
-		case 'w':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=1; datLCD[4]=1; datLCD[5]=0; datLCD[6]=1; datLCD[7]=1; datLCD[8]=1;
-		break;
-		case 'x':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=1; datLCD[4]=1; datLCD[5]=1; datLCD[6]=0; datLCD[7]=0; datLCD[8]=0;
-		break;
-		case 'y':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=1; datLCD[4]=1; datLCD[5]=1; datLCD[6]=0; datLCD[7]=0; datLCD[8]=1;
-		break;
-		case 'z':datLCD[0]=1; datLCD[1]=0; datLCD[2]=1; datLCD[3]=1; datLCD[4]=1; datLCD[5]=1; datLCD[6]=0; datLCD[7]=1; datLCD[8]=0;
-		break;
-		}
-	}
-	void numero(int numero)
-	{
-		switch (numero){
-		case 0:datLCD[0]=1; datLCD[1]=0; datLCD[2]=0; datLCD[3]=1; datLCD[4]=1; datLCD[5]=0; datLCD[6]=0; datLCD[7]=0; datLCD[8]=0;
-		break;
-		case 1:datLCD[0]=1; datLCD[1]=0; datLCD[2]=0; datLCD[3]=1; datLCD[4]=1; datLCD[5]=0; datLCD[6]=0; datLCD[7]=0; datLCD[8]=1;
-		break;
-		case 2:datLCD[0]=1; datLCD[1]=0; datLCD[2]=0; datLCD[3]=1; datLCD[4]=1; datLCD[5]=0; datLCD[6]=0; datLCD[7]=1; datLCD[8]=0;
-		break;
-		case 3:datLCD[0]=1; datLCD[1]=0; datLCD[2]=0; datLCD[3]=1; datLCD[4]=1; datLCD[5]=0; datLCD[6]=0; datLCD[7]=1; datLCD[8]=1;
-		break;
-		case 4:datLCD[0]=1; datLCD[1]=0; datLCD[2]=0; datLCD[3]=1; datLCD[4]=1; datLCD[5]=0; datLCD[6]=1; datLCD[7]=0; datLCD[8]=0;
-		break;
-		case 5: datLCD[0]=1; datLCD[1]=0; datLCD[2]=0; datLCD[3]=1; datLCD[4]=1; datLCD[5]=0; datLCD[6]=1; datLCD[7]=0; datLCD[8]=1;
-		break;
-		case 6: datLCD[0]=1; datLCD[1]=0; datLCD[2]=0; datLCD[3]=1; datLCD[4]=1; datLCD[5]=0; datLCD[6]=1; datLCD[7]=1; datLCD[8]=0;
-		break;
-		case 7:datLCD[0]=1; datLCD[1]=0; datLCD[2]=0; datLCD[3]=1; datLCD[4]=1; datLCD[5]=0; datLCD[6]=1; datLCD[7]=1; datLCD[8]=1;
-		break;
-		case 8:datLCD[0]=1; datLCD[1]=0; datLCD[2]=0; datLCD[3]=1; datLCD[4]=1; datLCD[5]=1; datLCD[6]=0; datLCD[7]=0; datLCD[8]=0;
-		break;
-		case 9:datLCD[0]=1; datLCD[1]=0; datLCD[2]=0; datLCD[3]=1; datLCD[4]=1; datLCD[5]=1; datLCD[6]=0; datLCD[7]=0; datLCD[8]=1;
-		break;
-		}
+  datLCD[0] = 0;datLCD[1] = 0;datLCD[2] = 0;datLCD[3] = 0;datLCD[4] = 0;datLCD[5] = 1; datLCD[6] = on;datLCD[7] = cursor;datLCD[8] = parpadeo;
 
-	}
-	void caracteres (char caracter[])
-	{
-		switch (caracter[0]){
+  escribirLCD();
 
-		case '°':datLCD[0]=1; datLCD[1]=1; datLCD[2]=1; datLCD[3]=0; datLCD[4]=0; datLCD[5]=0; datLCD[6]=1; datLCD[7]=1; datLCD[8]=0;
-			break;
-		case ':':datLCD[0]=1; datLCD[1]=0; datLCD[2]=0; datLCD[3]=1; datLCD[4]=1; datLCD[5]=1; datLCD[6]=0; datLCD[7]=1; datLCD[8]=0;
-		break;
-		case '.':datLCD[0]=1; datLCD[1]=0; datLCD[2]=0; datLCD[3]=1; datLCD[4]=0; datLCD[5]=1; datLCD[6]=1; datLCD[7]=1; datLCD[8]=0;
-		break;
-		case '(':datLCD[0]=1; datLCD[1]=0; datLCD[2]=0; datLCD[3]=1; datLCD[4]=0; datLCD[5]=1; datLCD[6]=0; datLCD[7]=0; datLCD[8]=0;
-		break;
-		case ')':datLCD[0]=1; datLCD[1]=0; datLCD[2]=0; datLCD[3]=1; datLCD[4]=0; datLCD[5]=1; datLCD[6]=0; datLCD[7]=0; datLCD[8]=1;
-		break;
-		}
-	}
-	void descomponerNumero(int valor) {
-
-	int digit4 = valor / 1000;
-	int digit33 = valor - (digit4 * 1000);
-	int digit3 = digit33 / 100;
-	int digit22 = valor - (digit4 * 1000) - (digit3 * 100);
-	int digit2 = digit22 / 10;
-	int digit1 = valor - (digit4 * 1000) - (digit3 * 100) - (digit2 * 10);
-
-	numero(digit4);  // (miles)
-	escribirLCD();
-	    ejecutar();
-	numero(digit3);  // centenas)
-	escribirLCD();
-	    ejecutar();
-	numero(digit2);  // (decenas)
-	escribirLCD();
-	    ejecutar();
-	numero(digit1);  //(unidades)
-	escribirLCD();
-	    ejecutar();
-	}
-	void descomponerNumero3(int valor) {
-	    int digit3 = valor / 100;  // Centenas
-	    int digit22 = valor - (digit3 * 100);
-	    int digit2 = digit22 / 10;  // Decenas
-	    int digit1 = valor - (digit3 * 100) - (digit2 * 10);  // Unidades
-
-	    numero(digit3);
-	    escribirLCD();
-	    ejecutar();
-	    numero(digit2);
-	    escribirLCD();
-	    ejecutar();
-	    numero(digit1);
-	    escribirLCD();
-	    ejecutar();
-	}
+  ejecutar();
 
 
+
+  /* Entry mode set */
+
+  datLCD[0] = 0;datLCD[1] = 0;datLCD[2] = 0;datLCD[3] = 0;datLCD[4] = 0;datLCD[5] = 0;datLCD[6] = 1; datLCD[7] = LR;datLCD[8] = S;
+
+  escribirLCD();
+
+  ejecutar();
+
+  }
+
+  void borrarPantalla()
+
+  {
+
+  datLCD[0] = 0; datLCD[1] = 0;datLCD[2] = 0;datLCD[3] = 0;datLCD[4] = 0;datLCD[5] = 0;datLCD[6] = 0;datLCD[7] = 0;datLCD[8] = 1;
+
+  escribirLCD();
+
+  ejecutar();
+
+
+
+  }
+
+
+
+  void volverinicio()
+
+  {
+
+  datLCD[0] = 0;datLCD[1] = 0;datLCD[2] = 0;datLCD[3] = 0;datLCD[4] = 0;datLCD[5] = 0;datLCD[6] = 0;datLCD[7] = 1;datLCD[8] = 0;
+
+  escribirLCD();
+
+  ejecutar();
+
+  }
+
+
+
+  void espacio(int LR, int SC)
+
+  {
+
+  datLCD[0] = 0; datLCD[1] = 0;datLCD[2] = 0;datLCD[3] = 0;datLCD[4] = 1; datLCD[5] = SC; datLCD[6] = LR;datLCD[7] = 0;datLCD[8] = 0;
+
+  escribirLCD();
+
+  ejecutar();
+
+  }
+
+
+
+  void confdireccion(int AC6, int AC5, int AC4, int AC3, int AC2, int AC1, int AC0)
+
+  {
+
+  datLCD[0] = 0;datLCD[1] = 1;datLCD[2] = AC6;datLCD[3] = AC5;datLCD[4] = AC4;datLCD[5] = AC3;datLCD[6] = AC2;datLCD[7] = AC1;datLCD[8] = AC0;
+
+  escribirLCD();
+
+  ejecutar();
+
+  }
+
+
+
+  void escribirRAM(int D7, int D6, int D5, int D4, int D3, int D2, int D1, int D0){
+
+  datLCD[0] = 1; datLCD[1] = D7;datLCD[2] = D6;datLCD[3] = D5;datLCD[4] = D4;datLCD[5] = D3;datLCD[6] = D2;datLCD[7] = D1;datLCD[8] = D0;
+
+  escribirLCD();
+
+  ejecutar();
+
+  };
+
+  void num(int num)
+
+  {
+
+  switch (num){
+
+
+
+  case 0:datLCD[0]=1; datLCD[1]=0; datLCD[2]=0; datLCD[3]=1; datLCD[4]=1;      datLCD[5]=0; datLCD[6]=0; datLCD[7]=0; datLCD[8]=0;
+
+  break;
+
+  case  1: datLCD[0]=1; datLCD[1]=0; datLCD[2]=0; datLCD[3]=1; datLCD[4]=1;      datLCD[5]=0; datLCD[6]=0; datLCD[7]=0; datLCD[8]=1;
+
+  break;
+
+  case  2: datLCD[0]=1; datLCD[1]=0; datLCD[2]=0; datLCD[3]=1; datLCD[4]=1;      datLCD[5]=0; datLCD[6]=0; datLCD[7]=1; datLCD[8]=0;
+
+  break;
+
+  case  3: datLCD[0]=1; datLCD[1]=0; datLCD[2]=0; datLCD[3]=1; datLCD[4]=1;      datLCD[5]=0; datLCD[6]=0; datLCD[7]=1; datLCD[8]=1;
+
+  break;
+
+  case  4: datLCD[0]=1; datLCD[1]=0; datLCD[2]=0; datLCD[3]=1; datLCD[4]=1;      datLCD[5]=0; datLCD[6]=1; datLCD[7]=0; datLCD[8]=0;
+
+  break;
+
+  case  5: datLCD[0]=1; datLCD[1]=0; datLCD[2]=0; datLCD[3]=1; datLCD[4]=1;      datLCD[5]=0; datLCD[6]=1; datLCD[7]=0; datLCD[8]=1;
+
+  break;
+
+  case  6: datLCD[0]=1; datLCD[1]=0; datLCD[2]=0; datLCD[3]=1; datLCD[4]=1;      datLCD[5]=0; datLCD[6]=1; datLCD[7]=1; datLCD[8]=0;
+
+  break;
+
+  case  7: datLCD[0]=1; datLCD[1]=0; datLCD[2]=0; datLCD[3]=1; datLCD[4]=1;      datLCD[5]=0; datLCD[6]=1; datLCD[7]=1; datLCD[8]=1;
+
+  break;
+
+  case  8: datLCD[0]=1; datLCD[1]=0; datLCD[2]=0; datLCD[3]=1; datLCD[4]=1;      datLCD[5]=1; datLCD[6]=0; datLCD[7]=0; datLCD[8]=0;
+
+  break;
+
+  case  9: datLCD[0]=1; datLCD[1]=0; datLCD[2]=0; datLCD[3]=1; datLCD[4]=1;      datLCD[5]=1; datLCD[6]=0; datLCD[7]=0; datLCD[8]=1;
+
+  break;
+
+  }
+
+
+
+  }
 /**
   * @brief System Clock Configuration
   * @retval None
@@ -1226,7 +536,7 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin : PA4 */
   GPIO_InitStruct.Pin = GPIO_PIN_4;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PB12 PB13 PB14 PB15
